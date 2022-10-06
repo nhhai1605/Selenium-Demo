@@ -20,13 +20,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 // Update this class name by replacing S3214321 with your student ID
-class MyPetstoreDemoW11_S3214321 {
+class MyPetstoreDemoW11_S3822918
+{
     WebDriver myDriver;
 
     @Test
     @Order(1)
     @DisplayName("Enter Petstore website")
-    void test01(){
+    void test01()
+    {
         String petStoreURL = "https://petstore.octoperf.com";
         myDriver.get(petStoreURL);
         // Do any asserts here.
@@ -35,7 +37,8 @@ class MyPetstoreDemoW11_S3214321 {
     @Test
     @Order(2)
     @DisplayName("Check Price for Adult Male Chihuahua at product page")
-    void checkChihuahua1() {
+    void checkChihuahua1()
+    {
 
         String chihuahuaURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-26";
         myDriver.get(chihuahuaURL);
@@ -47,11 +50,13 @@ class MyPetstoreDemoW11_S3214321 {
 
         List<WebElement> lweA = myDriver.findElements(By.tagName("a"));
         System.out.println("Printing text from <a> elements:");
-        for (WebElement wea : lweA){
+        for (WebElement wea : lweA)
+        {
             System.out.print(wea.getText() + ",");
         }
         System.out.println("Printing href attribute values from <a> elements:");
-        for (WebElement wea : lweA){
+        for (WebElement wea : lweA)
+        {
             System.out.println(wea.getAttribute("href") + ",");
         }
 
@@ -59,7 +64,8 @@ class MyPetstoreDemoW11_S3214321 {
 
         List<WebElement> lweTD = myDriver.findElements(By.tagName("td"));
         System.out.println("Printing text from <td> elements:");
-        for (WebElement wea : lweTD){ // each of this are td WebElements
+        for (WebElement wea : lweTD)
+        { // each of this are td WebElements
             System.out.print(wea.getText() + ", ");
         }
 
@@ -67,9 +73,11 @@ class MyPetstoreDemoW11_S3214321 {
         // When you are processing a webpage with Selenium, if the webpage doesn't load fast enough
         // an exception can be thrown unless you put in some wait time.
         // There are more official ways to handle wait time - we will look at that next week.
-        try {
+        try
+        {
             Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         // Write the tests for these below using JUnit assertEquals and the findElements method
@@ -82,7 +90,8 @@ class MyPetstoreDemoW11_S3214321 {
     @Test
     @Order(3)
     @DisplayName("Check the pet name, price and check if there is stock for one pet of your choice.")
-    void checkAnotherPet() {
+    void checkAnotherPet()
+    {
 
         // Write the tests for these below using JUnit assertEquals and the findElements method
         fail("Task 11.4 : Check that the price is ??? using JUnit assertEquals");
@@ -93,6 +102,7 @@ class MyPetstoreDemoW11_S3214321 {
          * You will be asked to submit this for your Assignment 3 .
          */
     }
+
     @Test
     @Order(4)
     @DisplayName("More examples with Xpath")
@@ -132,7 +142,8 @@ class MyPetstoreDemoW11_S3214321 {
     @Test
     @Order(5)
     @DisplayName("Start a menagerie! Select three fish, two cats and one third type of pet that's in stock. How much will it cost?")
-    void startAMenagerie() {
+    void startAMenagerie()
+    {
         fail("Start a menagerie");
 
         /**
@@ -144,7 +155,8 @@ class MyPetstoreDemoW11_S3214321 {
     // @Disabled
     @Order(0)
     @DisplayName("Sanity test only")
-     void sanityTest1(){
+     void sanityTest1()
+    {
         // When this passes I know I have the webdriver and Junit set up correctly
         String petStoreURL = "https://petstore.octoperf.com";
         myDriver.get(petStoreURL);
@@ -152,13 +164,15 @@ class MyPetstoreDemoW11_S3214321 {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp()
+    {
         SeleniumDriverFactory sdf =new SeleniumDriverFactory ();
         this.myDriver = sdf.getDriver();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown()
+    {
         //myDriver.close();
         myDriver.quit();
     }

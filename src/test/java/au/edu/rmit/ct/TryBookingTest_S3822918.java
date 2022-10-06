@@ -13,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 // Update this class name by replacing S3214321 with your student ID
-class TryBookingTest_S3214321 {
+class TryBookingTest_S3822918
+{
     WebDriver myDriver;
 
 
@@ -21,7 +22,8 @@ class TryBookingTest_S3214321 {
     // @Disabled
     @Order(0)
     @DisplayName("Sanity test only")
-     void sanityTest(){
+     void sanityTest()
+    {
         // When this passes I know I have the webdriver and Junit set up correctly
         String url = "https://www.trybooking.com";
         myDriver.get(url);
@@ -29,13 +31,15 @@ class TryBookingTest_S3214321 {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp()
+    {
         SeleniumDriverFactory sdf =new SeleniumDriverFactory ();
         this.myDriver = sdf.getDriver();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown()
+    {
         //myDriver.close();
         myDriver.quit();
     }
