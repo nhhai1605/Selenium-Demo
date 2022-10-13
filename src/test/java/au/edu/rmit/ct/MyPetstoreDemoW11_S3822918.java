@@ -8,14 +8,13 @@
 package au.edu.rmit.ct;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
+import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
@@ -23,157 +22,146 @@ import static org.junit.jupiter.api.Assertions.fail;
 class MyPetstoreDemoW11_S3822918
 {
     WebDriver myDriver;
-
+    void print(String str)
+    {
+        System.out.println(str);
+    }
     @Test
     @Order(1)
-    @DisplayName("Enter Petstore website")
-    void test01()
+    @DisplayName("Enter PetStore website")
+    void enterPetStoreWebsite()
     {
-        String petStoreURL = "https://petstore.octoperf.com";
+        String petStoreURL = "https://petstore.octoperf.com/";
+        WebDriverWait wait = new WebDriverWait(myDriver, Duration.ofMillis(3000));
         myDriver.get(petStoreURL);
-        // Do any asserts here.
+        wait.until(ExpectedConditions.urlToBe(petStoreURL));
+        assertEquals("JPetStore Demo", myDriver.getTitle());
+        print("------ Checking for entering the pet store website passed -------");
+
+    }
+
+    //Assume that the stock here can be updated ==>
+    //So, we still can place an order with "Back ordered." and "<number> in stock." but only if <number> is larger than 0.
+    //If <number> is 0, we will throw an exception.
+    void checkStock() throws Exception
+    {
+        String backOrdered = "Back ordered.";
+        String inStock = "in stock.";
+        String wrongStockFormat = "0 in stock.";
+        WebElement webElement = myDriver.findElement(By.xpath(String.format("//td[contains(text(), '%s')]|//td[contains(text(), '%s')]", inStock, backOrdered)));
+        if(webElement.getText().equals(wrongStockFormat))
+        {
+            throw new Exception("Test Failed: The stock format cannot be '0 in stock.'");
+        }
     }
 
     @Test
     @Order(2)
-    @DisplayName("Check Price for Adult Male Chihuahua at product page")
-    void checkChihuahua1()
-    {
+    @DisplayName("Check the pet name, price and check if there is stock for one pet of your choice.")
+    void checkAnotherPet() throws Exception {
+        String manxURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-15";
+        WebDriverWait wait = new WebDriverWait(myDriver, Duration.ofMillis(3000));
+        myDriver.get(manxURL);
+        wait.until(ExpectedConditions.urlToBe(manxURL));
 
-        String chihuahuaURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-26";
-        myDriver.get(chihuahuaURL);
+        String itemId = "EST-15";
+        String petName = "With tail Manx";
+        String petBreed = "Manx";
+        String petPrice = "$23.50";
 
-        // WebElement class represents an html tag such as <p> , <a> , <img> <td> for tables etc. even forms
-        // ... and this class has methods for you to check content and attributes
-        // see the getText() method below to read the text between the opening/closing tags.
-        // see the getAttribute("href") method which is used by toString() to read the url
+        WebElement webElement;
 
-        List<WebElement> lweA = myDriver.findElements(By.tagName("a"));
-        System.out.println("Printing text from <a> elements:");
-        for (WebElement wea : lweA)
-        {
-            System.out.print(wea.getText() + ",");
-        }
-        System.out.println("Printing href attribute values from <a> elements:");
-        for (WebElement wea : lweA)
-        {
-            System.out.println(wea.getAttribute("href") + ",");
-        }
+        webElement = myDriver.findElement(By.xpath(String.format("//b[contains(text(), '%s')]", itemId)));
+        assertEquals(itemId, webElement.getText());
 
-        // for this web page (very 1990s) a lot of content are in tables so <td> is a standard cell in the table
+        webElement = myDriver.findElement(By.xpath(String.format("//font[contains(text(), '%s')]", petBreed)));
+        assertEquals(petName, webElement.getText());
 
-        List<WebElement> lweTD = myDriver.findElements(By.tagName("td"));
-        System.out.println("Printing text from <td> elements:");
-        for (WebElement wea : lweTD)
-        { // each of this are td WebElements
-            System.out.print(wea.getText() + ", ");
-        }
+        webElement = myDriver.findElement(By.xpath(String.format("//td[contains(text(), '%s')]", petBreed)));
+        assertEquals(petBreed, webElement.getText());
 
-        // Thread.sleep() is not normally encouraged, but is a quick way to pause browser
-        // When you are processing a webpage with Selenium, if the webpage doesn't load fast enough
-        // an exception can be thrown unless you put in some wait time.
-        // There are more official ways to handle wait time - we will look at that next week.
-        try
-        {
-            Thread.sleep(1000);
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        // Write the tests for these below using JUnit assertEquals and the findElements method
-        fail("Task 11.1 : Check that the price is $125.50");
-        fail("Task 11.2 : Check that the product name is correct (Adult Male Chihuahua) for this product page");
-        fail("Task 11.3 : Check that the adult male chihuahua is in stock. ( > 0 ) - or perhaps this should be your first check before 11.1!?");
+        //Please read the comment above the checkStock() function for more details about this function.
+        checkStock();
+
+        webElement = myDriver.findElement(By.xpath(String.format("//td[contains(text(), '%s')]", petPrice)));
+        assertEquals(petPrice, webElement.getText());
+
+
+        print("------ Checking for another pet passed -------");
 
     }
 
     @Test
     @Order(3)
-    @DisplayName("Check the pet name, price and check if there is stock for one pet of your choice.")
-    void checkAnotherPet()
-    {
-
-        // Write the tests for these below using JUnit assertEquals and the findElements method
-        fail("Task 11.4 : Check that the price is ??? using JUnit assertEquals");
-        fail("Task 11.5 : Check that the product name is correct (???) for this product page");
-        fail("Task 11.6 Check that the ??? is in stock. ( > 0 ) or maybe you should check this before Task 11.4??");
-
-        /**
-         * You will be asked to submit this for your Assignment 3 .
-         */
-    }
-
-    @Test
-    @Order(4)
-    @DisplayName("More examples with Xpath")
-    void checkChihuahua2(){
-
-        String chihuahuaURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-26";
-        myDriver.get(chihuahuaURL);
-
-        /**
-         * If you have time you can look further with this below.
-         * Xpath has powerful functionality to find elements and values
-         * Xpath is a bit like regular expressions for html elements (DOM tree)
-         */
-
-        WebElement we; // to store the result of our search. Of course you can also use a List of WebElements if you expect a return of many results
-
-        // In this example we are searching only for the first td element, which has exact text value - '$125.50'
-        we = myDriver.findElement(By.xpath("//td[text()='$125.50']"));
-
-        // In this example we are searching only for any element, which contains a particular string value
-        // (a partial match, like a substring match)
-        // Here we are using * to check all elements for their enclosed value
-        // <p>Like the value here</p>
-        we = myDriver.findElement(By.xpath("//*[contains(text(),'$125')]"));
-
-        System.out.println("we.toString(): " + we.toString()); // see what it looks like toString()
-        System.out.println("we.getText(): " + we.getText()); // see what the text is
-
-        /**
-         * we.toString(): [[FirefoxDriver: firefox on WINDOWS (955939a2-3c3d-4cf3-b531-05dc9df88c99)] -> xpath: //*[contains(text(),'$125')]]
-         * we.getText(): $125.50
-         *
-         */
-
-    }
-
-    @Test
-    @Order(5)
     @DisplayName("Start a menagerie! Select three fish, two cats and one third type of pet that's in stock. How much will it cost?")
-    void startAMenagerie()
+    void startAMenagerie() throws Exception
     {
-        fail("Start a menagerie");
 
-        /**
-         * You will be asked to submit this for your Assignment 3 .
-         */
+        String backOrdered = "Back ordered.";
+        String inStock = "in stock.";
+        String wrongStockFormat = "0 in stock.";
+        String fishURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-21";
+        String catURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-16";
+        String dogURL = "https://petstore.octoperf.com/actions/Catalog.action?viewItem=&itemId=EST-8";
+        String fishActionURL = "https://petstore.octoperf.com/actions/Cart.action?addItemToCart=&workingItemId=EST-21";
+        String catActionURL = "https://petstore.octoperf.com/actions/Cart.action?addItemToCart=&workingItemId=EST-16";
+        String dogActionURL = "https://petstore.octoperf.com/actions/Cart.action?addItemToCart=&workingItemId=EST-8";
+
+        WebDriverWait wait = new WebDriverWait(myDriver, Duration.ofMillis(3000));
+        WebElement webElement;
+        float actualCost = 0f;
+
+        myDriver.get(fishURL);
+        wait.until(ExpectedConditions.urlToBe(fishURL));
+        checkStock();
+        webElement = myDriver.findElement(By.xpath("//td[contains(text(), '$5.29')]"));
+        actualCost += Float.parseFloat(webElement.getText().substring(1)) * 3;
+
+        myDriver.get(catURL);
+        wait.until(ExpectedConditions.urlToBe(catURL));
+        checkStock();
+        webElement = myDriver.findElement(By.xpath("//td[contains(text(), '$93.50')]"));
+        actualCost += Float.parseFloat(webElement.getText().substring(1)) * 2;
+
+        myDriver.get(dogURL);
+        wait.until(ExpectedConditions.urlToBe(dogURL));
+        checkStock();
+        webElement = myDriver.findElement(By.xpath("//td[contains(text(), '$18.50')]"));
+        actualCost += Float.parseFloat(webElement.getText().substring(1)) * 1;
+
+        for (int i = 0; i < 3; i++)
+        {
+            myDriver.get(fishActionURL);
+            wait.until(ExpectedConditions.urlToBe(fishActionURL));
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            myDriver.get(catActionURL);
+            wait.until(ExpectedConditions.urlToBe(catActionURL));
+        }
+        for(int i = 0; i < 1; i++)
+        {
+            myDriver.get(dogActionURL);
+            wait.until(ExpectedConditions.urlToBe(dogActionURL));
+        }
+        webElement = myDriver.findElement(By.xpath(String.format("//*[contains(text(), 'Sub Total')]")));
+        print(String.format("Actual cost: %.2f", actualCost));
+        print("Expected cost: " + webElement.getText().substring(12));
+        assertEquals(String.format("Sub Total: $%.2f", actualCost), webElement.getText(), "The subtotal cost is not correct");
+        print("------ Checking for starting a menagerie passed -------");
     }
 
-    @Test
-    // @Disabled
-    @Order(0)
-    @DisplayName("Sanity test only")
-     void sanityTest1()
-    {
-        // When this passes I know I have the webdriver and Junit set up correctly
-        String petStoreURL = "https://petstore.octoperf.com";
-        myDriver.get(petStoreURL);
-        // do any sanity check here.
-    }
 
     @BeforeEach
     void setUp()
     {
-        SeleniumDriverFactory sdf =new SeleniumDriverFactory ();
+        SeleniumDriverFactory sdf = new SeleniumDriverFactory();
         this.myDriver = sdf.getDriver();
     }
 
     @AfterEach
     void tearDown()
     {
-        //myDriver.close();
         myDriver.quit();
     }
 }

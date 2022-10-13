@@ -15,11 +15,9 @@ public class SeleniumDriverFactory
     SeleniumDriverFactory()
     {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-//        System.setProperty("webdriver.gecko.driver","H:\\drivers\\geckodriver.exe");
     }
     WebDriver getDriver()
     {
-//        return new FirefoxDriver();
         return new ChromeDriver();
     }
 
